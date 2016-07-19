@@ -2,9 +2,9 @@
 
 describe('pos', () => {
   let inputs;
-  
+
   beforeEach(() => {
-     inputs = [
+    inputs = [
       'ITEM000001',
       'ITEM000001',
       'ITEM000001',
@@ -15,15 +15,15 @@ describe('pos', () => {
       'ITEM000005',
       'ITEM000005'
     ];
-    
+
   });
 
-  it('shoule print item', ()=> {
+  it('should print item', ()=> {
     let allItems = loadAllItems();
-    const items = buildCartItems(inputs,allItems);
+    const cartItems = buildCartItems(inputs, allItems);
     const expectItems = [
       {
-        item:{
+        item: {
           barcode: 'ITEM000001',
           name: '雪碧',
           unit: '瓶',
@@ -38,20 +38,98 @@ describe('pos', () => {
           unit: '斤',
           price: 15.00
         },
-        count:2
+        count: 2
       },
       {
-        item:{
+        item: {
           barcode: 'ITEM000005',
           name: '方便面',
           unit: '袋',
           price: 4.50
         },
-        count:3
+        count: 3
       }
     ];
-    expect(items).toEqual(expectItems);
+    expect(cartItems).toEqual(expectItems);
   });
+
+
+  it('should print subTotal and saved', ()=> {
+    let promotions = loadPromotions();
+    let cartItems = [
+      {
+        item: {
+          barcode: 'ITEM000001',
+          name: '雪碧',
+          unit: '瓶',
+          price: 3.00
+        },
+        count: 5
+      },
+      {
+        item: {
+          barcode: 'ITEM000003',
+          name: '荔枝',
+          unit: '斤',
+          price: 15.00
+        },
+        count: 2
+      },
+      {
+        item: {
+          barcode: 'ITEM000005',
+          name: '方便面',
+          unit: '袋',
+          price: 4.50
+        },
+        count: 3
+      }
+    ];
+    let printCartItems = buildSubTotalAndSaved(cartItems, promotions);
+    let expectPrintCartItems = [
+      {
+        cartItem: {
+          item: {
+            barcode: 'ITEM000001',
+            name: '雪碧',
+            unit: '瓶',
+            price: 3.00
+          },
+          count: 5
+        },
+        subTotal: 12,
+        saved:3
+      },
+      {
+        cartItem: {
+          item: {
+            barcode: 'ITEM000003',
+            name: '荔枝',
+            unit: '斤',
+            price: 15.00
+          },
+          count: 2
+        },
+        subTotal: 30,
+        saved:0
+      },
+      {
+        cartItem: {
+          item: {
+            barcode: 'ITEM000005',
+            name: '方便面',
+            unit: '袋',
+            price: 4.50
+          },
+          count: 3
+        },
+        subTotal: 9,
+        saved:4.5
+      }
+    ];
+    expect(printCartItems).toEqual(expectPrintCartItems);
+  });
+
 
   it('should print correct text', () => {
 
@@ -70,4 +148,5 @@ describe('pos', () => {
 
     expect(console.log).toHaveBeenCalledWith(expectText);
   });
-});
+})
+;
